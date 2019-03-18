@@ -4,30 +4,57 @@
 #
 Name     : R-phylogram
 Version  : 2.1.0
-Release  : 16
+Release  : 17
 URL      : https://cran.r-project.org/src/contrib/phylogram_2.1.0.tar.gz
 Source0  : https://cran.r-project.org/src/contrib/phylogram_2.1.0.tar.gz
 Summary  : Dendrograms for Evolutionary Analysis
 Group    : Development/Tools
 License  : GPL-3.0
+Requires: R-DEoptimR
+Requires: R-Rcpp
 Requires: R-ape
+Requires: R-assertthat
+Requires: R-cli
 Requires: R-dendextend
+Requires: R-diptest
 Requires: R-fpc
 Requires: R-ggplot2
-Requires: R-stringi
+Requires: R-gtable
+Requires: R-lazyeval
+Requires: R-mime
+Requires: R-modeltools
+Requires: R-munsell
+Requires: R-plyr
+Requires: R-scales
+Requires: R-tibble
+Requires: R-viridis
 Requires: R-whisker
+Requires: R-withr
+BuildRequires : R-DEoptimR
+BuildRequires : R-Rcpp
 BuildRequires : R-ape
+BuildRequires : R-assertthat
+BuildRequires : R-cli
 BuildRequires : R-dendextend
+BuildRequires : R-diptest
 BuildRequires : R-fpc
 BuildRequires : R-ggplot2
-BuildRequires : R-stringi
+BuildRequires : R-gtable
+BuildRequires : R-lazyeval
+BuildRequires : R-mime
+BuildRequires : R-modeltools
+BuildRequires : R-munsell
+BuildRequires : R-plyr
+BuildRequires : R-scales
+BuildRequires : R-tibble
+BuildRequires : R-viridis
 BuildRequires : R-whisker
-BuildRequires : clr-R-helpers
+BuildRequires : R-withr
+BuildRequires : buildreq-R
 
 %description
-deeply-nested lists ("dendrogram" objects).
-    Enables bi-directional conversion between dendrogram and
-    "phylo" objects
+# phylogram
+--------------------------------------------------------------------------------
 
 %prep
 %setup -q -c -n phylogram
@@ -37,11 +64,11 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1529948544
+export SOURCE_DATE_EPOCH=1552877174
 
 %install
+export SOURCE_DATE_EPOCH=1552877174
 rm -rf %{buildroot}
-export SOURCE_DATE_EPOCH=1529948544
 export LANG=C
 export CFLAGS="$CFLAGS -O3 -flto -fno-semantic-interposition "
 export FCFLAGS="$CFLAGS -O3 -flto -fno-semantic-interposition "
@@ -59,9 +86,9 @@ echo "FFLAGS = $FFLAGS -march=haswell -ftree-vectorize " >> ~/.R/Makevars
 echo "CXXFLAGS = $CXXFLAGS -march=haswell -ftree-vectorize " >> ~/.R/Makevars
 R CMD INSTALL --install-tests --built-timestamp=${SOURCE_DATE_EPOCH} --build  -l %{buildroot}/usr/lib64/R/library phylogram
 for i in `find %{buildroot}/usr/lib64/R/ -name "*.so"`; do mv $i $i.avx2 ; mv $i.avx2 ~/.stash/; done
-echo "CFLAGS = $CFLAGS -march=skylake-avx512 -ftree-vectorize -mprefer-vector-width=512 " > ~/.R/Makevars
-echo "FFLAGS = $FFLAGS -march=skylake-avx512 -ftree-vectorize -mprefer-vector-width=512 " >> ~/.R/Makevars
-echo "CXXFLAGS = $CXXFLAGS -march=skylake-avx512 -ftree-vectorize -mprefer-vector-width=512  " >> ~/.R/Makevars
+echo "CFLAGS = $CFLAGS -march=skylake-avx512 -ftree-vectorize " > ~/.R/Makevars
+echo "FFLAGS = $FFLAGS -march=skylake-avx512 -ftree-vectorize " >> ~/.R/Makevars
+echo "CXXFLAGS = $CXXFLAGS -march=skylake-avx512 -ftree-vectorize " >> ~/.R/Makevars
 R CMD INSTALL --preclean --install-tests --no-test-load --built-timestamp=${SOURCE_DATE_EPOCH} --build  -l %{buildroot}/usr/lib64/R/library phylogram
 for i in `find %{buildroot}/usr/lib64/R/ -name "*.so"`; do mv $i $i.avx512 ; mv $i.avx512 ~/.stash/; done
 echo "CFLAGS = $CFLAGS -ftree-vectorize " > ~/.R/Makevars
@@ -76,8 +103,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export _R_CHECK_FORCE_SUGGESTS_=false
-R CMD check --no-manual --no-examples --no-codoc -l %{buildroot}/usr/lib64/R/library phylogram|| : 
-cp ~/.stash/* %{buildroot}/usr/lib64/R/library/*/libs/ || :
+R CMD check --no-manual --no-examples --no-codoc  phylogram || :
 
 
 %files
@@ -107,3 +133,5 @@ cp ~/.stash/* %{buildroot}/usr/lib64/R/library/*/libs/ || :
 /usr/lib64/R/library/phylogram/help/phylogram.rdx
 /usr/lib64/R/library/phylogram/html/00Index.html
 /usr/lib64/R/library/phylogram/html/R.css
+/usr/lib64/R/library/phylogram/tests/testthat.R
+/usr/lib64/R/library/phylogram/tests/testthat/test_IMO.R
