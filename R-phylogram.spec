@@ -4,7 +4,7 @@
 #
 Name     : R-phylogram
 Version  : 2.1.0
-Release  : 23
+Release  : 24
 URL      : https://cran.r-project.org/src/contrib/phylogram_2.1.0.tar.gz
 Source0  : https://cran.r-project.org/src/contrib/phylogram_2.1.0.tar.gz
 Summary  : Dendrograms for Evolutionary Analysis
